@@ -98,86 +98,124 @@ class _LoginValidationDemoState extends State<LoginValidationDemo> {
   //           }));
   // }
 
-  bool _userValidate=false;
+//   bool _userValidate=false;
+//
+//
+//   FocusNode nameFocusNode=FocusNode();
+//
+//
+//   TextEditingController nameController=TextEditingController();
+//
+//   final _formKey = GlobalKey<FormState>();
+//
+//
+//  final databaseReference = FirebaseDatabase.instance.ref();
+// //
+// //   final databaseReference = FirebaseDatabase(
+// //       databaseURL:
+// //       "https://drcsystems-3f6ca-default-rtdb.firebaseio.com/")
+// //       .ref()
+// //       .child("Items");
+//
+//   void addData(String pushedText)  {
+//      databaseReference.child('demoTest').push().set({
+//       "pushedText":pushedText
+//     });
+//   }
+//
+//
+//   void initState(){
+//     super.initState();
+//
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: const Text("Firebase Realtime Database"),),
+//       body: SingleChildScrollView(
+//         child: Form(
+//           key: _formKey,
+//           child: Column(
+//             children: [
+//               const SizedBox(height: 10,),
+//
+//               Padding(
+//                 padding: const EdgeInsets.all(10),
+//                 child: TextFormField(
+//                   onChanged: (text){
+//                     if(text.length<4 || text.isEmpty){
+//                       setState(() {
+//                         _userValidate=true;
+//                       });
+//                     }else{
+//                       setState(() {
+//                         _userValidate=false;
+//                       });
+//                     }
+//                   },
+//                   validator: (value) {
+//                     if (value == null || value.isEmpty) {
+//                       return 'Please enter some text';
+//                     }
+//                     return null;
+//                   },
+//                   textInputAction: TextInputAction.done,
+//                   focusNode: nameFocusNode,
+//                   controller: nameController,
+//                   decoration: InputDecoration(
+//                       errorText: _userValidate?"Name must be greater than 4 digit":null,
+//                       labelText: 'Enter your name',
+//                       enabledBorder: OutlineInputBorder(
+//                           borderRadius: BorderRadius.circular(15),
+//                           borderSide: const BorderSide(width: 3,color: Colors.blue)
+//                       )
+//                   ),
+//                 ),
+//               ),
+//
+//
+//               Padding(padding: const EdgeInsets.all(20),child: ElevatedButton(
+//                   onPressed: (){
+//                     addData(nameController.text);
+//                   }, child: const Text("Push")))
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
 
-
-  FocusNode nameFocusNode=FocusNode();
-
-
-  TextEditingController nameController=TextEditingController();
-
-  final _formKey = GlobalKey<FormState>();
-
-
-  final databaseReference = FirebaseDatabase.instance.ref();
-
-
-  void addData(String pushedText) async {
-    await databaseReference.child('demoTest').push().set({
-      "pushedText":pushedText
-    });
-  }
-
-
-  void initState(){
-    super.initState();
-
-  }
+  final fb = FirebaseDatabase.instance;
+  final myController = TextEditingController();
+  final name = "Name";
 
   @override
   Widget build(BuildContext context) {
+    final ref = fb.reference();
+    ref.child("sem").set("1");
     return Scaffold(
-      appBar: AppBar(title: const Text("Firebase Realtime Database"),),
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              const SizedBox(height: 10,),
-
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: TextFormField(
-                  onChanged: (text){
-                    if(text.length<4 || text.isEmpty){
-                      setState(() {
-                        _userValidate=true;
-                      });
-                    }else{
-                      setState(() {
-                        _userValidate=false;
-                      });
-                    }
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                  textInputAction: TextInputAction.done,
-                  focusNode: nameFocusNode,
-                  controller: nameController,
-                  decoration: InputDecoration(
-                      errorText: _userValidate?"Name must be greater than 4 digit":null,
-                      labelText: 'Enter your name',
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(width: 3,color: Colors.blue)
-                      )
-                  ),
-                ),
-              ),
-
-
-              Padding(padding: const EdgeInsets.all(20),child: ElevatedButton(
-                  onPressed: (){
-                    addData(nameController.text);
-                  }, child: const Text("Push")))
-            ],
-          ),
+        appBar: AppBar(
+          title: Text("Login"),
         ),
-      ),
-    );
+        body: Container(
+            child: Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(name),
+                    SizedBox(width: 20),
+                    Expanded(child: TextField(controller: myController)),
+                  ],
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    ref.child(name).set(myController.text);
+                  },
+                  child: Text("Submit"),
+                ),
+              ],
+            )));
+
   }
 }
